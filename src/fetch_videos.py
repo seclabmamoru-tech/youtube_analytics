@@ -172,7 +172,7 @@ def save_raw_videos(videos: list[dict], date_str: str) -> Path:
 
 
 def main():
-    date_str = datetime.now(tz=JST).strftime("%Y-%m-%d")
+    date_str = os.environ.get("RUN_DATE") or datetime.now(tz=JST).strftime("%Y-%m-%d")
     published_after = get_published_after()
     print(f"[INFO] date={date_str}, publishedAfter={published_after}")
 

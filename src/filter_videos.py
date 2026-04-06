@@ -7,6 +7,7 @@ data/YYYY-MM-DD/filtered_videos.json に保存する。
 """
 
 import json
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -50,7 +51,7 @@ def save_filtered_videos(videos: list[dict], date_str: str) -> Path:
 
 
 def main():
-    date_str = datetime.now(tz=JST).strftime("%Y-%m-%d")
+    date_str = os.environ.get("RUN_DATE") or datetime.now(tz=JST).strftime("%Y-%m-%d")
 
     print(f"[INFO] date={date_str}")
     raw_videos = load_raw_videos(date_str)

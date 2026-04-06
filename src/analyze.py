@@ -631,7 +631,7 @@ def update_index_html(reports_dir: Path, docs_dir: Path) -> None:
 # ─────────────────────────────────────────────
 
 def main():
-    date_str = datetime.now(tz=JST).strftime("%Y-%m-%d")
+    date_str = os.environ.get("RUN_DATE") or datetime.now(tz=JST).strftime("%Y-%m-%d")
     print(f"[INFO] Analyzing data for {date_str}")
 
     # データ読み込み

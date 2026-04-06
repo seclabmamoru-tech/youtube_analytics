@@ -29,6 +29,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # JST の日付を一度だけ計算し、後続ステップ全体で共有する
+      - name: Set RUN_DATE (JST)
+        run: |
+          RUN_DATE=$(TZ=Asia/Tokyo date '+%Y-%m-%d')
+          echo "RUN_DATE=${RUN_DATE}" >> "$GITHUB_ENV"
+          echo "[INFO] RUN_DATE=${RUN_DATE}"
+
       - name: Fetch videos from YouTube API
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
@@ -47,10 +54,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          DATE=$(python -c "from datetime import datetime, timedelta, timezone; \
-            print(datetime.now(tz=timezone(timedelta(hours=9))).strftime('%Y-%m-%d'))")
-
           git add data/ reports/ docs/
           git diff --cached --quiet && echo "No changes to commit." || \
-            git commit -m "chore: add trend report for ${DATE}"
+            git commit -m "chore: add trend report for ${RUN_DATE}"
           git push origin HEAD
