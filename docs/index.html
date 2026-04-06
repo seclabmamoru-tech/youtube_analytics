@@ -10,28 +10,18 @@
       --text2: #94a3b8; --accent: #38bdf8; --border: #475569;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg); color: var(--text);
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 3rem 1rem; min-height: 100vh;
-    }
+    body { background: var(--bg); color: var(--text); font-family: "Helvetica Neue", Arial, sans-serif;
+            display: flex; flex-direction: column; align-items: center; padding: 3rem 1rem; min-height: 100vh; }
     h1 { font-size: 2rem; color: var(--accent); margin-bottom: .5rem; }
     p.sub { color: var(--text2); margin-bottom: 2rem; }
-    table {
-      width: 100%; max-width: 700px; border-collapse: collapse;
-      background: var(--surface); border-radius: 12px; overflow: hidden;
-    }
+    table { width: 100%; max-width: 700px; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; }
     th { padding: .75rem 1rem; background: #334155; color: var(--text2); text-align: left; font-size: .85rem; }
     td { padding: .75rem 1rem; border-bottom: 1px solid var(--border); }
     tr:last-child td { border-bottom: none; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .btn {
-      display: inline-block; padding: .3rem .9rem;
-      background: var(--accent); color: #0f172a;
-      border-radius: 6px; font-weight: bold; font-size: .85rem;
-    }
+    .btn { display: inline-block; padding: .3rem .9rem; background: var(--accent); color: #0f172a;
+             border-radius: 6px; font-weight: bold; font-size: .85rem; }
     .btn:hover { opacity: .85; text-decoration: none; }
     footer { margin-top: 3rem; color: var(--text2); font-size: .8rem; }
   </style>
@@ -41,9 +31,8 @@
   <p class="sub">日本語トレンド動画の定期分析レポート一覧</p>
   <table>
     <thead><tr><th>分析日</th><th>レポート</th></tr></thead>
-    <tbody>
-      <tr><td colspan="2">レポートはまだありません。</td></tr>
-    </tbody>
+    <tbody><tr><td><a href="../reports/2026-04-07.html">2026-04-07</a></td><td><a href="../reports/2026-04-07.html" class="btn">レポートを開く</a></td></tr>
+</tbody>
   </table>
   <footer>Powered by YouTube Data API v3 + Anthropic Claude | GitHub Pages</footer>
 </body>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube トレンドレポート 2026-04-07</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #334155;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --accent: #38bdf8;
+      --border: #475569;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: "Helvetica Neue", Arial, sans-serif; padding: 2rem 1rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 2rem; color: var(--accent); margin-bottom: .25rem; }
+    .subtitle { color: var(--text2); margin-bottom: 2rem; font-size: .9rem; }
+    .summary-box { background: var(--surface); border-left: 4px solid var(--accent); padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 2rem; line-height: 1.7; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    @media(max-width:700px) { .grid2 { grid-template-columns: 1fr; } }
+    .card { background: var(--surface); border-radius: 12px; padding: 1.5rem; }
+    .card h2 { color: var(--accent); font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th { text-align: left; padding: .5rem .75rem; background: var(--surface2); color: var(--text2); font-size: .8rem; text-transform: uppercase; }
+    td { padding: .5rem .75rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; padding: .15rem .5rem; border-radius: 999px; color: #fff; font-size: .75rem; font-weight: bold; }
+    .tag { display: inline-block; padding: .2rem .6rem; border-radius: 6px; margin: .15rem; font-size: .82rem; }
+    .tag.new { background: #4c1d95; color: #c4b5fd; }
+    .tag.gone { background: #7f1d1d; color: #fca5a5; }
+    .up { color: #22c55e; font-weight: bold; }
+    .down { color: #ef4444; font-weight: bold; }
+    .buzz-list { list-style: none; padding: 0; }
+    .buzz-list li { padding: .4rem 0; border-bottom: 1px solid var(--border); font-size: .9rem; line-height: 1.5; }
+    .buzz-list li::before { content: "✦ "; color: var(--accent); }
+    .chart-wrapper { position: relative; height: 280px; }
+    .section { margin-bottom: 2rem; }
+    .meta { color: var(--text2); font-size: .8rem; margin-top: 2rem; text-align: right; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>YouTube トレンドレポート</h1>
+  <p class="subtitle">分析日: 2026-04-07　｜　初回実行（比較データなし）　｜　分析動画数: 13件</p>
+
+  <div class="summary-box">
+    <strong>総括:</strong> 2026年4月7日の日本YouTubeトレンドは、ゲームカテゴリが全体の約7割を占め、特にShadowverse: Worlds BeyondのJCS関連、ポケモンFR実況の切り抜き、ストグラseason2のRP動画が活況を呈している。音楽カテゴリではキタニタツヤ「火種」が登録者574人に対し23万再生というバズ係数413超の異常値を記録し、楽曲単体のバイラル力が際立つ。VTuber関連では、ホロライブ・ぶいすぽの切り抜きチャンネルが安定してトレンド入りし、二次コンテンツによるエコシステムが成熟している。全体として「切り抜き文化」が日本YouTubeの主要なコンテンツ消費形態として定着していることが改めて確認された。
+  </div>
+
+  <!-- キーワードランキング + カテゴリ分布 -->
+  <div class="grid2">
+    <div class="card">
+      <h2>頻出タグ・キーワード TOP10（グラフ）</h2>
+      <div class="chart-wrapper">
+        <canvas id="kwChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>カテゴリ別トレンド分布</h2>
+      <div class="chart-wrapper">
+        <canvas id="catChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- キーワードランキング表 -->
+  <div class="card section">
+    <h2>頻出タグ・キーワードランキング TOP20</h2>
+    <table>
+      <thead><tr><th>#</th><th>キーワード</th><th>件数</th><th>トレンド</th></tr></thead>
+      <tbody><tr><td>1</td><td>切り抜き</td><td>7</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>2</td><td>シャドバ/Shadowverse</td><td>5</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>3</td><td>ストグラ</td><td>4</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>4</td><td>ぶいすぽ</td><td>4</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>5</td><td>ポケモンFR</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>6</td><td>一ノ瀬うるは</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>7</td><td>ホロライブ</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>8</td><td>ノーリミット/NOLIMIT</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>9</td><td>ムラッシュ/MRG</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>10</td><td>Spicies</td><td>3</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>11</td><td>キタニタツヤ</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>12</td><td>Vaundy</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>13</td><td>MAZZEL</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>14</td><td>Ottiki</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>15</td><td>ドングリ</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>16</td><td>スマブラsp</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>17</td><td>青鬼</td><td>1</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>18</td><td>ゲーム配信</td><td>2</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>19</td><td>ホロスターズ</td><td>1</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+<tr><td>20</td><td>加藤純一</td><td>1</td><td><span class="badge" style="background:#8b5cf6">NEW</span></td></tr>
+</tbody>
+    </table>
+  </div>
+
+  <!-- バズ係数上位グラフ + 共通点 -->
+  <div class="grid2">
+    <div class="card">
+      <h2>バズ係数上位5動画</h2>
+      <div class="chart-wrapper">
+        <canvas id="buzzChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>バズ動画の共通点</h2>
+      <ul class="buzz-list"><li>切り抜きチャンネルによる二次コンテンツがバズ動画全体の過半数を占め、本配信者のブランド力を活用した拡散構造が機能している</li><li>バズ係数1位のキタニタツヤ「火種」は登録者わずか574人のTopicチャンネルで23万再生を達成しており、楽曲自体のバイラル力（タイアップ・SNS拡散）が圧倒的に強い</li><li>VTuber関連（ホロライブ・ぶいすぽ・ホロスターズ）の切り抜き動画が複数ランクインし、コミュニティ内での情報共有・話題消費のスピードが速い</li><li>Shadowverse: Worlds Beyondに関する動画が複数本トレンド入りしており、JCS（大会）に向けた盛り上がりやチーム編成ニュースが視聴を牽引</li><li>タイトルに具体的なエピソードや感情表現（「キレられながら」「叫ぶ」「無敵配信が止まらない」）を含む動画ほど再生数・バズ係数が高い傾向</li><li>ストグラ（GTA RP）系動画は物語性のあるロールプレイの切り取りが視聴者の興味を引き、中規模チャンネルでも安定した再生数を獲得</li><li>音楽カテゴリはリリース直後（1〜2日以内）の初動再生でトレンド入りしており、ファンダムの即時反応が鍵となっている</li><li>登録者数に対する再生数の比率（バズ係数）が高い動画ほど、既存ファン以外からの流入（検索・おすすめ・SNS）が大きいことを示唆</li></ul>
+    </div>
+  </div>
+
+  <!-- トレンド変化 -->
+  <div class="card section">
+    <h2>トレンド変化（前回比較）</h2>
+    <div class="grid2">
+      <div>
+        <p style="margin-bottom:.5rem;color:var(--text2);font-size:.85rem;">新登場キーワード</p>
+        <div><span class="tag new">切り抜き</span>, <span class="tag new">シャドバ</span>, <span class="tag new">ストグラ</span>, <span class="tag new">ぶいすぽ</span>, <span class="tag new">ポケモンFR</span>, <span class="tag new">一ノ瀬うるは</span>, <span class="tag new">ホロライブ</span>, <span class="tag new">NOLIMIT</span>, <span class="tag new">ムラッシュ</span>, <span class="tag new">Spicies</span>, <span class="tag new">キタニタツヤ</span>, <span class="tag new">Vaundy</span>, <span class="tag new">MAZZEL</span>, <span class="tag new">Ottiki</span>, <span class="tag new">スマブラsp</span>, <span class="tag new">青鬼</span>, <span class="tag new">加藤純一</span>, <span class="tag new">ホロスターズ</span>, <span class="tag new">ドングリ</span>, <span class="tag new">JCS</span></div>
+        <p style="margin:.75rem 0 .5rem;color:var(--text2);font-size:.85rem;">消えたキーワード</p>
+        <div>なし</div>
+      </div>
+      <div class="grid2" style="gap:.75rem">
+        <div>
+          <table>
+            <thead><tr><th>上昇ワード</th><th>変化</th></tr></thead>
+            <tbody><tr><td colspan='2'>データなし</td></tr></tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead><tr><th>下降ワード</th><th>変化</th></tr></thead>
+            <tbody><tr><td colspan='2'>データなし</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カテゴリ詳細 -->
+  <div class="card section">
+    <h2>カテゴリ別詳細</h2>
+    <table>
+      <thead><tr><th>カテゴリ</th><th>件数</th><th>割合</th><th>分析コメント</th></tr></thead>
+      <tbody><tr><td>ゲーム</td><td>9</td><td>69.2%</td><td>全体の約7割をゲームカテゴリが占め、特にShadowverse: Worlds BeyondやポケモンFR、ストグラなどGTA系RPサーバーの切り抜き・配信が目立つ。VTuber関連の切り抜きチャンネルが多く、二次創作的なコンテンツエコシステムが活発。</td></tr>
+<tr><td>音楽</td><td>3</td><td>23.1%</td><td>キタニタツヤ・Vaundy・MAZZELと人気アーティストの新曲がトレンド入り。Topic（自動生成）チャンネル経由でのリリース直後の再生数獲得が顕著で、特にキタニタツヤ「火種」は登録者574人に対し23万再生と異常なバズを記録。</td></tr>
+<tr><td>エンタメ</td><td>1</td><td>7.7%</td><td>ホロライブ関連の切り抜き動画が1本ランクイン。事業縮小というセンシティブな話題を扱いつつ23万再生を獲得し、VTuber界隈の話題性の高さが伺える。</td></tr>
+</tbody>
+    </table>
+  </div>
+
+  <!-- キーワード予測 -->
+  <div class="card section">
+    <h2>今後2週間の注目キーワード予測 TOP10</h2>
+    <table>
+      <thead><tr><th>キーワード</th><th>予測根拠</th><th>確信度</th></tr></thead>
+      <tbody><tr><td>Shadowverse JCS</td><td>JCS（Japan Championship Series）に向けた練習配信・チーム編成が複数動画で言及されており、大会日程が近づくにつれ関連動画が急増する見込み</td><td><span class='badge' style='background:#22c55e'>高</span></td></tr>
+<tr><td>キタニタツヤ 火種</td><td>リリース直後に異常なバズ係数413を記録。タイアップ元の露出やMV公開によりさらに再生数が伸びる可能性が高い</td><td><span class='badge' style='background:#22c55e'>高</span></td></tr>
+<tr><td>ストグラseason2</td><td>ストグラのシーズン2が進行中であり、新規ロールプレイの切り抜き需要が継続的に発生する構造がある</td><td><span class='badge' style='background:#22c55e'>高</span></td></tr>
+<tr><td>一ノ瀬うるは ポケモン</td><td>ポケモンFR実況が2つの切り抜きチャンネルで同時にトレンド入りしており、シリーズ完結まで関連動画の量産が見込まれる</td><td><span class='badge' style='background:#22c55e'>高</span></td></tr>
+<tr><td>Vaundy 新曲</td><td>「イデアが溢れて眠れない」short ver.のリリースからフルバージョン公開が予想され、再度トレンド入りの可能性がある</td><td><span class='badge' style='background:#f59e0b'>中</span></td></tr>
+<tr><td>MAZZEL Banquet</td><td>アルバム「Banquet」からの楽曲が順次公開される流れにあり、次のシングルカット・MV公開で再浮上が期待される</td><td><span class='badge' style='background:#f59e0b'>中</span></td></tr>
+<tr><td>ホロスターズ 事業縮小</td><td>ホロスターズの体制変更に関するコミュニティの関心が高く、続報や関連切り抜きが今後も注目を集める可能性がある</td><td><span class='badge' style='background:#f59e0b'>中</span></td></tr>
+<tr><td>MRG/ムラッシュゲーミング シャドバ</td><td>eスポーツチームの新部門立ち上げとJCS参加により、選手の配信・切り抜きが増加する局面にある</td><td><span class='badge' style='background:#f59e0b'>中</span></td></tr>
+<tr><td>ぶいすぽ 新プロジェクト</td><td>ぶいすぽ関連切り抜きが安定的にトレンド入りしており、新メンバーや新企画の発表があれば爆発的にバズする土壌がある</td><td><span class='badge' style='background:#ef4444'>低</span></td></tr>
+<tr><td>青鬼 ノーコンチャレンジ</td><td>レトロホラーゲームの挑戦系配信が16万再生を獲得しており、クリア達成時にさらなるバズが見込まれる</td><td><span class='badge' style='background:#ef4444'>低</span></td></tr>
+</tbody>
+    </table>
+  </div>
+
+  <p class="meta">Generated by YouTube Trend Analyzer | 2026-04-07</p>
+</div>
+
+<script>
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: '#94a3b8' } } },
+};
+
+// キーワードランキング棒グラフ
+new Chart(document.getElementById('kwChart'), {
+  type: 'bar',
+  data: {
+    labels: ["切り抜き", "シャドバ/Shadowverse", "ストグラ", "ぶいすぽ", "ポケモンFR", "一ノ瀬うるは", "ホロライブ", "ノーリミット/NOLIMIT", "ムラッシュ/MRG", "Spicies"],
+    datasets: [{
+      label: '件数',
+      data: [7, 5, 4, 4, 3, 3, 3, 3, 3, 3],
+      backgroundColor: 'rgba(56,189,248,0.7)',
+      borderColor: '#38bdf8',
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    indexAxis: 'y',
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+      y: { ticks: { color: '#f1f5f9', font: { size: 11 } }, grid: { color: '#334155' } }
+    }
+  }
+});
+
+// カテゴリドーナツグラフ
+new Chart(document.getElementById('catChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ["ゲーム", "音楽", "エンタメ"],
+    datasets: [{
+      data: [9, 3, 1],
+      backgroundColor: [
+        '#38bdf8','#818cf8','#34d399','#fb923c','#f472b6',
+        '#a78bfa','#facc15','#4ade80','#60a5fa','#f87171',
+        '#2dd4bf','#e879f9','#fb7185','#a3e635','#fdba74',
+      ],
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 11 } } }
+    }
+  }
+});
+
+// バズ係数棒グラフ
+new Chart(document.getElementById('buzzChart'), {
+  type: 'bar',
+  data: {
+    labels: ["火種…", "【スパ様】シャドバ部門顔合わせ!　202…", "イデアが溢れて眠れない (short v…", "JCSに向けて鍛錬【Shadowvers…", "Clover…"],
+    datasets: [{
+      label: 'バズ係数',
+      data: [413.4164, 26.6836, 15.97, 8.7773, 7.3469],
+      backgroundColor: 'rgba(52,211,153,0.7)',
+      borderColor: '#34d399',
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#334155' } },
+      y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
