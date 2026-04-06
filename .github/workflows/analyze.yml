@@ -1,0 +1,56 @@
+name: YouTube Trend Analysis
+
+on:
+  schedule:
+    # JST 10:00 = UTC 01:00、毎月1日・15日
+    - cron: "0 1 1,15 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch videos from YouTube API
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python src/fetch_videos.py
+
+      - name: Filter videos
+        run: python src/filter_videos.py
+
+      - name: Analyze with Claude API and generate report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python src/analyze.py
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          DATE=$(python -c "from datetime import datetime, timedelta, timezone; \
+            print(datetime.now(tz=timezone(timedelta(hours=9))).strftime('%Y-%m-%d'))")
+
+          git add data/ reports/ docs/
+          git diff --cached --quiet && echo "No changes to commit." || \
+            git commit -m "chore: add trend report for ${DATE}"
+          git push origin HEAD
