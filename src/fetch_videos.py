@@ -64,7 +64,8 @@ def search_videos(youtube, published_after: str) -> list[dict]:
             response = youtube.search().list(**params).execute()
         except HttpError as e:
             print(f"[ERROR] search.list failed: {e}", file=sys.stderr)
-            break
+            # クォータ超過(403)やその他 API エラー時は空リストで続行
+            return video_ids
 
         items = response.get("items", [])
         for item in items:
@@ -183,7 +184,8 @@ def main():
     print(f"[INFO] Found {len(video_ids)} video IDs")
 
     if not video_ids:
-        print("[WARN] No videos found. Exiting.")
+        print("[WARN] No videos found. Saving empty list so downstream steps can proceed.")
+        save_raw_videos([], date_str)
         sys.exit(0)
 
     print("[INFO] Fetching video details...")

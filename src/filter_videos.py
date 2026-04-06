@@ -18,8 +18,8 @@ JST = timezone(timedelta(hours=9))
 def load_raw_videos(date_str: str) -> list[dict]:
     path = Path("data") / date_str / "raw_videos.json"
     if not path.exists():
-        print(f"[ERROR] {path} not found.", file=sys.stderr)
-        sys.exit(1)
+        print(f"[WARN] {path} not found. Treating as empty (fetch may have returned 0 results).", file=sys.stderr)
+        return []
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
