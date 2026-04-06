@@ -109,10 +109,13 @@ def build_stats_summary(videos: list[dict]) -> dict:
     return {
         "total_videos": len(videos),
         "top_tags": tag_counter.most_common(50),
+        # HTML 生成時に月間本数を引くための辞書（30日データ ≒ 月間本数）
+        "tag_count_map": dict(tag_counter),
         "category_distribution": cat_counter.most_common(),
         "top_buzz_videos": [
             {
                 "title": v["title"],
+                "videoId": v["videoId"],
                 "channelTitle": v["channelTitle"],
                 "viewCount": v["viewCount"],
                 "subscriberCount": v["subscriberCount"],
@@ -215,6 +218,14 @@ def analyze_with_claude(
   "keyword_predictions": [
     {{"keyword": "予測キーワード", "reason": "理由", "confidence": "高/中/低"}}
   ],
+  "knowledge_keywords": [
+    {{
+      "keyword": "キーワード",
+      "reason": "知識欲ユーザーが関心を持つ理由",
+      "category": "学習系/解説系/ニュース解説/スキルアップ/科学・技術/歴史・文化/その他",
+      "monthly_video_count": 数値
+    }}
+  ],
   "overall_summary": "全体的なトレンドサマリー（200字程度）"
 }}
 
@@ -224,7 +235,11 @@ def analyze_with_claude(
 3. buzz_common_features: バズ係数上位動画の共通点を5〜8点
 4. trend_changes: 前回比較（前回データなしの場合は全キーワードをNEWとし、trend_changesは空リスト）
 5. keyword_predictions: 今後2週間で注目すべきキーワード TOP10（根拠付き）
-6. 全動画データを網羅的に活用すること
+6. knowledge_keywords: 「学びたい・深く知りたい」という知識欲の高いユーザーが
+   検索・視聴しそうなキーワード TOP15。教育・解説・スキルアップ・科学技術・
+   ニュース解説など知的好奇心を刺激するジャンルから抽出。
+   monthly_video_count は提供データ内での該当動画数を入れること。
+7. 全動画データを網羅的に活用すること
 """
 
     response = client.messages.create(
@@ -260,11 +275,21 @@ def _escape(s) -> str:
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _fmt_num(n: int) -> str:
+    """数値を万・億単位で短縮表示する"""
+    if n >= 100_000_000:
+        return f"{n/100_000_000:.1f}億"
+    if n >= 10_000:
+        return f"{n/10_000:.1f}万"
+    return f"{n:,}"
+
+
 def generate_html_report(
     analysis: dict,
     current_stats: dict,
     date_str: str,
     prev_date_str: str | None,
+    all_videos: list[dict],
 ) -> str:
     # ── Chart.js データ準備 ──────────────────────────────
     kw_top10 = analysis.get("keyword_ranking", [])[:10]
@@ -279,13 +304,17 @@ def generate_html_report(
     buzz_labels = json.dumps([v["title"][:20] + "…" for v in buzz_top5], ensure_ascii=False)
     buzz_scores = json.dumps([v["buzzScore"] for v in buzz_top5])
 
-    # ── キーワードランキングテーブル ─────────────────────
+    # ── キーワードランキングテーブル（月間本数付き）────────
+    tag_count_map = current_stats.get("tag_count_map", {})
     kw_rows = ""
     for k in analysis.get("keyword_ranking", []):
+        kw = k["keyword"]
+        monthly = tag_count_map.get(kw.lower(), k["count"])
         kw_rows += (
             f"<tr><td>{k['rank']}</td>"
-            f"<td>{_escape(k['keyword'])}</td>"
+            f"<td>{_escape(kw)}</td>"
             f"<td>{k['count']}</td>"
+            f"<td>{monthly}</td>"
             f"<td>{_trend_badge(k.get('trend', '→'))}</td></tr>\n"
         )
 
@@ -335,6 +364,38 @@ def generate_html_report(
             f"<td><span class='badge' style='background:{conf_color}'>{conf}</span></td></tr>\n"
         )
 
+    # ── 知識欲ユーザー向けキーワード ─────────────────────
+    knowledge_rows = ""
+    cat_badge_color = {
+        "学習系": "#0ea5e9", "解説系": "#8b5cf6", "ニュース解説": "#f59e0b",
+        "スキルアップ": "#22c55e", "科学・技術": "#38bdf8", "歴史・文化": "#fb923c",
+    }
+    for kk in analysis.get("knowledge_keywords", []):
+        cat = kk.get("category", "その他")
+        cat_color = cat_badge_color.get(cat, "#6b7280")
+        knowledge_rows += (
+            f"<tr><td>{_escape(kk['keyword'])}</td>"
+            f"<td><span class='badge' style='background:{cat_color}'>{_escape(cat)}</span></td>"
+            f"<td>{kk.get('monthly_video_count', '-')}</td>"
+            f"<td>{_escape(kk.get('reason', ''))}</td></tr>\n"
+        )
+
+    # ── バズ動画詳細一覧（YouTubeリンク・登録者数・再生数）
+    video_rows = ""
+    sorted_videos = sorted(all_videos, key=lambda v: v.get("buzzScore", 0), reverse=True)
+    for i, v in enumerate(sorted_videos, 1):
+        yt_url = f"https://www.youtube.com/watch?v={v['videoId']}"
+        video_rows += (
+            f"<tr>"
+            f"<td>{i}</td>"
+            f"<td><a href='{yt_url}' target='_blank' rel='noopener'>{_escape(v['title'])}</a></td>"
+            f"<td>{_escape(v.get('channelTitle', ''))}</td>"
+            f"<td>{_fmt_num(v.get('subscriberCount', 0))}</td>"
+            f"<td>{_fmt_num(v.get('viewCount', 0))}</td>"
+            f"<td>{v.get('buzzScore', 0):.1f}</td>"
+            f"</tr>\n"
+        )
+
     prev_label = f"前回比較対象: {prev_date_str}" if prev_date_str else "初回実行（比較データなし）"
 
     html = f"""<!DOCTYPE html>
@@ -380,6 +441,9 @@ def generate_html_report(
     .chart-wrapper {{ position: relative; height: 280px; }}
     .section {{ margin-bottom: 2rem; }}
     .meta {{ color: var(--text2); font-size: .8rem; margin-top: 2rem; text-align: right; }}
+    a {{ color: var(--accent); text-decoration: none; }}
+    a:hover {{ text-decoration: underline; opacity: .85; }}
+    td a {{ display: block; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
   </style>
 </head>
 <body>
@@ -411,8 +475,19 @@ def generate_html_report(
   <div class="card section">
     <h2>頻出タグ・キーワードランキング TOP20</h2>
     <table>
-      <thead><tr><th>#</th><th>キーワード</th><th>件数</th><th>トレンド</th></tr></thead>
+      <thead><tr><th>#</th><th>キーワード</th><th>件数</th><th>月間本数</th><th>トレンド</th></tr></thead>
       <tbody>{kw_rows}</tbody>
+    </table>
+    <p style="margin-top:.75rem;color:var(--text2);font-size:.78rem;">※ 月間本数 = 直近30日の取得データ内でこのキーワードを含む動画数</p>
+  </div>
+
+  <!-- 知識欲ユーザー向けキーワード -->
+  <div class="card section">
+    <h2>知識欲ユーザーの注目キーワード TOP15</h2>
+    <p style="margin-bottom:.75rem;color:var(--text2);font-size:.85rem;">「学びたい・深く知りたい」ユーザーが関心を持つキーワードと、月間の動画本数（参考）</p>
+    <table>
+      <thead><tr><th>キーワード</th><th>カテゴリ</th><th>月間本数</th><th>関心を持つ理由</th></tr></thead>
+      <tbody>{knowledge_rows}</tbody>
     </table>
   </div>
 
@@ -427,6 +502,18 @@ def generate_html_report(
     <div class="card">
       <h2>バズ動画の共通点</h2>
       <ul class="buzz-list">{buzz_features_html}</ul>
+    </div>
+  </div>
+
+  <!-- バズ動画詳細一覧 -->
+  <div class="card section">
+    <h2>バズ動画 詳細一覧（バズ係数順）</h2>
+    <p style="margin-bottom:.75rem;color:var(--text2);font-size:.85rem;">バズ係数 = 再生数 ÷ 登録者数。タイトルをクリックでYouTubeへ。</p>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>#</th><th>タイトル</th><th>チャンネル</th><th>登録者数</th><th>再生数</th><th>バズ係数</th></tr></thead>
+        <tbody>{video_rows}</tbody>
+      </table>
     </div>
   </div>
 
@@ -657,7 +744,7 @@ def main():
 
     # HTML レポート生成
     print("[INFO] Generating HTML report...")
-    html = generate_html_report(analysis, current_stats, date_str, prev_date_str)
+    html = generate_html_report(analysis, current_stats, date_str, prev_date_str, videos)
 
     # GitHub Pages は docs/ 配下しか配信できないため docs/reports/ に保存
     reports_dir = Path("docs") / "reports"
