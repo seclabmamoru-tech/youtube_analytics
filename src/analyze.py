@@ -563,7 +563,7 @@ new Chart(document.getElementById('buzzChart'), {{
 # ─────────────────────────────────────────────
 
 def update_index_html(reports_dir: Path, docs_dir: Path) -> None:
-    """reports/ 以下の全 HTML を走査して docs/index.html を更新する"""
+    """docs/reports/ 以下の全 HTML を走査して docs/index.html を更新する"""
     report_files = sorted(
         [f for f in reports_dir.glob("*.html") if f.name != "index.html"],
         reverse=True,
@@ -572,9 +572,10 @@ def update_index_html(reports_dir: Path, docs_dir: Path) -> None:
     rows = ""
     for rf in report_files:
         date = rf.stem
+        # docs/index.html から見た相対パス: reports/YYYY-MM-DD.html
         rows += (
-            f'<tr><td><a href="../reports/{rf.name}">{date}</a></td>'
-            f'<td><a href="../reports/{rf.name}" class="btn">レポートを開く</a></td></tr>\n'
+            f'<tr><td><a href="reports/{rf.name}">{date}</a></td>'
+            f'<td><a href="reports/{rf.name}" class="btn">レポートを開く</a></td></tr>\n'
         )
 
     if not rows:
@@ -658,7 +659,8 @@ def main():
     print("[INFO] Generating HTML report...")
     html = generate_html_report(analysis, current_stats, date_str, prev_date_str)
 
-    reports_dir = Path("reports")
+    # GitHub Pages は docs/ 配下しか配信できないため docs/reports/ に保存
+    reports_dir = Path("docs") / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     report_path = reports_dir / f"{date_str}.html"
     with open(report_path, "w", encoding="utf-8") as f:

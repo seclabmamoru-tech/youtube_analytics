@@ -55,9 +55,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # ディレクトリが存在しない場合に git add が失敗しないよう保証
-          mkdir -p data reports docs
+          mkdir -p data docs/reports
 
-          git add data/ reports/ docs/
+          git add data/ docs/
           git diff --cached --quiet && echo "No changes to commit." || \
             git commit -m "chore: add trend report for ${RUN_DATE}"
           git push origin HEAD
